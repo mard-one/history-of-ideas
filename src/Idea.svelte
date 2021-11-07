@@ -1,27 +1,32 @@
 <script>
   import { onMount } from "svelte";
   import { Octokit } from "@octokit/core";
-  import SvelteMarkdown from "svelte-markdown";
+  // import SvelteMarkdown from "svelte-markdown";
 
   export let fileName = "";
-  let source = "";
-  console.log("fileName", fileName);
+  let source = null;
+  // console.log("fileName", fileName);
   onMount(async () => {
     const octokit = new Octokit();
     try {
       const data = await octokit.request(
         "GET /repos/{owner}/{repo}/contents/{path}",
         {
+          headers: {
+            accept: "application/vnd.github.v3.html+json",
+          },
           owner: "mard-one",
           repo: "unit-ideas",
           path: fileName + ".md",
         }
       );
-      console.log("data", data.data.content);
-      source = window.atob(data.data.content);
-      console.log("content", content);
+      source = data.data;
+      // console.log("source", source);
+      if (window.FB) {
+        FB.XFBML.parse();
+      }
     } catch (err) {
-      console.log("fetch failed");
+      // console.log("fetch failed");
     }
   });
 </script>
@@ -32,12 +37,15 @@
   class="edit-article">edit this article</a
 >
 
-<SvelteMarkdown {source} />
-
+<!-- <SvelteMarkdown {source} /> -->
+{@html source}
+<br />
+<br />
+<br />
 <div
   class="fb-comments"
   data-href="https://localhost"
-  data-width=""
+  data-width="100%"
   data-numposts="5"
 />
 

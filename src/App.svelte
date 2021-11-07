@@ -14,7 +14,7 @@
   onMount(async () => {
     // const res = await fetch(`https://jsonplaceholder.typicode.com/photos?_limit=20`);
     // photos = await res.json();
-    console.log("start");
+    // console.log("start");
     const octokit = new Octokit();
     const ideas = [];
     try {
@@ -22,23 +22,26 @@
         owner: "mard-one",
         repo: "unit-ideas",
       });
-      console.log("res", res.data);
+      // console.log("res", res.data);
       for (const file of res.data) {
-        console.log("file", file);
-        console.log('file.name.includes(".json")', file.name.includes(".json"));
+        // console.log("file", file);
+        // console.log('file.name.includes(".json")', file.name.includes(".json"));
         if (file.name.includes(".json")) {
-          console.log("file", file);
+          // console.log("file", file);
           const data = await octokit.request(
             "GET /repos/{owner}/{repo}/contents/{path}",
             {
+              headers: {
+                accept: "application/vnd.github.v3.raw+json",
+              },
               owner: "mard-one",
               repo: "unit-ideas",
               path: file.path,
             }
           );
-          // console.log("data", data);
-          const content = JSON.parse(window.atob(data.data.content));
-          console.log("content", content);
+          // console.log("data raw", data);
+          const content = JSON.parse(data.data);
+          // console.log("content", content);
           ideas.push({
             ...content,
             articleFileName: file.name.replace(".json", ""),
@@ -46,9 +49,9 @@
         }
       }
     } catch (err) {
-      console.log("fetch failed");
+      // console.log("fetch failed");
     }
-    console.log("ideas", ideas);
+    // console.log("ideas", ideas);
     listOfIdeas.set(ideas);
   });
 </script>
@@ -93,6 +96,7 @@
   .container {
     display: flex;
     justify-content: space-between;
+    padding: 0 16px;
   }
 
   .gap-left {
@@ -107,5 +111,15 @@
   .gap-right {
     width: 100px;
     padding-left: 32px;
+  }
+  @media only screen and (max-width: 600px) {
+    .gap-left {
+      padding-right: 32px;
+      width: 0px;
+    }
+    .gap-right {
+      width: 0px;
+      padding-left: 32px;
+    }
   }
 </style>
