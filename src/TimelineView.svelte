@@ -9,7 +9,7 @@
       console.log("subscribe ideas", ideas);
       if (window.TL && ideas) {
         let test = new window.TL.Timeline("timeline-embed", {
-          scale: "human",
+          scale: "cosmological",
           title: {
             media: {
               caption: "",
