@@ -1,12 +1,13 @@
 <script>
   import { onMount } from "svelte";
   import { listOfIdeas } from "./stores";
-  import { Router, Link, Route } from "svelte-routing";
+  import { Router, Route } from "svelte-routing";
   import { Octokit } from "@octokit/core";
   import ListView from "./ListView.svelte";
   import Navbar from "./Navbar.svelte";
   import TimelineView from "./TimelineView.svelte";
   import Idea from "./Idea.svelte";
+  import Contribute from "./Contribute.svelte";
 
   export let url = "";
 
@@ -60,22 +61,51 @@
   />
   <script
     src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
+  <div id="fb-root" />
+  <script
+    async
+    defer
+    crossorigin="anonymous"
+    src="https://connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v12.0"
+    nonce="F0eoCuu0"></script>
 </svelte:head>
 
 <Router {url}>
-  <Navbar>
-    <Link to="ideas">List</Link>
-    <Link to="timeline">Timeline</Link>
-  </Navbar>
+  <Navbar />
   <main>
-    <Route path="ideas" component={ListView} />
-    <Route path="timeline" component={TimelineView} />
-    <Route path="/" component={ListView} />
+    <Route path="timeline"><TimelineView /></Route>
+    <div class="container">
+      <div class="gap gap-left" />
+      <div class="content">
+        <Route path="ideas"><ListView /></Route>
+        <Route path="ideas/:fileName" let:params>
+          <Idea fileName={params.fileName} />
+        </Route>
+        <Route path="contribute"><Contribute /></Route>
+      </div>
+      <div class="gap gap-right" />
+    </div>
+    <Route path="/"><TimelineView /></Route>
   </main>
-  <Route path="ideas/:fileName" let:params>
-    <Idea fileName={params.fileName} />
-  </Route>
 </Router>
 
 <style>
+  .container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .gap-left {
+    padding-right: 32px;
+    width: 200px;
+  }
+  .content {
+    position: relative;
+    flex-grow: 1;
+    max-width: 1080px;
+  }
+  .gap-right {
+    width: 100px;
+    padding-left: 32px;
+  }
 </style>

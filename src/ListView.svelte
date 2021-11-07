@@ -3,8 +3,7 @@
   import { Link } from "svelte-routing";
 </script>
 
-<h1>List view</h1>
-
+<h1>Ideas</h1>
 <ul>
   {#each $listOfIdeas as idea}
     <li>
