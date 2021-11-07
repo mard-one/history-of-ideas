@@ -1,6 +1,6 @@
 <script>
-  import { onMount } from "svelte";
-  import { listOfIdeas } from "./stores";
+  import { onDestroy, onMount } from "svelte";
+  import { listOfIdeas, timelineClass } from "./stores";
   import { Router, Route } from "svelte-routing";
   import { Octokit } from "@octokit/core";
   import ListView from "./ListView.svelte";
@@ -9,12 +9,7 @@
   import Idea from "./Idea.svelte";
   import Contribute from "./Contribute.svelte";
 
-  export let url = "";
-
   onMount(async () => {
-    // const res = await fetch(`https://jsonplaceholder.typicode.com/photos?_limit=20`);
-    // photos = await res.json();
-    // console.log("start");
     const octokit = new Octokit();
     const ideas = [];
     try {
@@ -63,17 +58,23 @@
     href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css"
   />
   <script
-    src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
+    src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"
+    on:load={(e) => {
+      // console.log("e", e);
+      // console.log("window.TL", window.TL);
+
+      timelineClass.set(window.TL);
+    }}/>
   <div id="fb-root" />
   <script
     async
     defer
     crossorigin="anonymous"
     src="https://connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v12.0"
-    nonce="F0eoCuu0"></script>
+    nonce="F0eoCuu0"/>
 </svelte:head>
 
-<Router {url}>
+<Router>
   <Navbar />
   <main>
     <Route path="timeline"><TimelineView /></Route>
