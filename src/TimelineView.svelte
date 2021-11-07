@@ -1,6 +1,10 @@
 <script>
+  import { onMount } from "svelte";
+
   import { listOfIdeas, timelineClass } from "./stores.js";
-  let timeline, ideas;
+  let timeline,
+    ideas,
+    pageLoaded = false;
 
   timelineClass.subscribe((tl) => {
     // console.log("subscribe tl", tl);
@@ -10,9 +14,10 @@
     // console.log("subscribe ideas", ideas);
     ideas = i;
   });
+
   // console.log("timeline", timeline);
   // console.log("ideas", ideas);
-  $: if (timeline && ideas.length) {
+  $: if (timeline && ideas.length && pageLoaded) {
     // console.log("timeline init");
     let timelineRef = new timeline.Timeline(
       "timeline-embed",
@@ -37,7 +42,7 @@
         hash_bookmark: true,
         duration: 500,
         debug: true,
-        font: 'bitter-raleway'
+        font: "bitter-raleway",
         // font: 'georgia-helvetica'
         // font: 'lustria-lato'
         // font: 'opensans-gentiumbook'
@@ -58,6 +63,9 @@
       }
     });
   }
+  onMount(() => {
+    pageLoaded = true;
+  });
 </script>
 
 <div
