@@ -64,14 +64,14 @@
       // console.log("window.TL", window.TL);
 
       timelineClass.set(window.TL);
-    }}/>
+    }}></script>
   <div id="fb-root" />
   <script
     async
     defer
     crossorigin="anonymous"
     src="https://connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v12.0"
-    nonce="F0eoCuu0"/>
+    nonce="F0eoCuu0"></script>
 </svelte:head>
 
 <Router>
@@ -81,9 +81,13 @@
     <div class="container">
       <div class="gap gap-left" />
       <div class="content">
-        <Route path="ideas"><ListView /></Route>
         <Route path="ideas/:fileName" let:params>
+          {console.log("executed")}
           <Idea fileName={params.fileName} />
+        </Route>
+        <Route path="ideas">
+          {console.log("shouldn't be executed")}
+          <ListView />
         </Route>
         <Route path="contribute"><Contribute /></Route>
       </div>
