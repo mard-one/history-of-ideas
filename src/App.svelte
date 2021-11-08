@@ -82,11 +82,9 @@
       <div class="gap gap-left" />
       <div class="content">
         <Route path="ideas/:fileName" let:params>
-          {console.log("executed")}
           <Idea fileName={params.fileName} />
         </Route>
         <Route path="ideas">
-          {console.log("shouldn't be executed")}
           <ListView />
         </Route>
         <Route path="contribute"><Contribute /></Route>
